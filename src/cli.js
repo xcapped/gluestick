@@ -9,6 +9,7 @@ const newApp = lazyMethodRequire("./commands/new");
 const startClient = lazyMethodRequire("./commands/start-client");
 const startServer = lazyMethodRequire("./commands/start-server");
 const startTest = lazyMethodRequire("./commands/test");
+const runCoverage = lazyMethodRequire("./commands/coverage");
 const generate = lazyMethodRequire("./commands/generate");
 const destroy = lazyMethodRequire("./commands/destroy");
 const dockerize = lazyMethodRequire("./commands/dockerize");
@@ -95,6 +96,13 @@ commander
   .option(firefoxOption.command, firefoxOption.description)
   .description("start tests")
   .action(() => spawnProcess("test", process.argv.slice(3)));
+
+commander
+  .command("coverage")
+  .description("generate coverage report")
+  .action(() => runCoverage(err => {
+    if (err) console.log(chalk.red(`ERROR: ${err}`)); 
+  }));
 
 // This is a catch all command. DO NOT PLACE ANY COMMANDS BELOW THIS
 commander

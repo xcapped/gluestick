@@ -4,6 +4,7 @@ const inquirer = require("inquirer");
 const fs = require("fs-extra");
 const path = require("path");
 const npmDependencies = require("../lib/npm-dependencies");
+const isGluestickProject = require("../lib/check-gluestick-project");
 
 function copyTo (destination) {
   fs.copySync(path.join(__dirname, "../../new"), destination);
@@ -23,13 +24,7 @@ function copyTo (destination) {
 }
 
 module.exports = function (projectName) {
-  var currentlyInProjectFolder = true;
-  try {
-    fs.statSync(path.join(process.cwd(), ".gluestick"));
-  }
-  catch (e) {
-    currentlyInProjectFolder = false;
-  }
+  var currentlyInProjectFolder = isGluestickProject(process.cwd());
 
   // No project name, or ran from inside an existing project install in current directory if approved
   if (!projectName || currentlyInProjectFolder) {
