@@ -100,7 +100,7 @@ commander
 commander
   .command("coverage")
   .description("generate coverage report")
-  .action(() => runCoverage(err => {
+  .action(() => runCoverage(null, err => {
     if (err) console.log(chalk.red(`ERROR: ${err}`)); 
   }));
 

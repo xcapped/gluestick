@@ -24,7 +24,7 @@ const config = {
     helperPath
   ],
   frameworks: ["mocha", "chai", "sinon"],
-  reporters: ["spec", "notify"],
+  reporters: ["spec", "notify", "coverage"],
   port: PORT,
   preprocessors: preprocessors,
   webpack: {
@@ -35,6 +35,12 @@ const config = {
         {
           test: webpackIsomorphicToolsPlugin.regular_expression("styles"),
           loader: "file-loader"
+        },
+        {
+          test: /\.js$/, 
+          loader: "isparta",
+          exclude: /test/, 
+          include: path.resolve(CWD, "src")
         }
       ].concat(shared.loaders, additionalLoaders),
       preLoaders: [
@@ -46,7 +52,7 @@ const config = {
     },
     plugins: [
       new webpack.DefinePlugin({
-        "TEST_PATH": JSON.stringify(path.join(process.cwd(), "test"))
+        "TEST_PATH": JSON.stringify(path.join(CWD, "test"))
       })
     ].concat(shared.plugins),
     resolve: {
@@ -64,6 +70,14 @@ const config = {
   },
   webpackServer: {
     noInfo: true
+  },
+  coverageReporter: {
+    reporters: [
+      { 
+        type: "html", 
+        subdir: "html" 
+      }
+    ]
   }
 };
 
