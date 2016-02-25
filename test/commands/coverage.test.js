@@ -1,8 +1,6 @@
 import { expect } from "chai";
 import fs from "fs";
 import path from "path";
-import mkdirp from "mkdirp";
-import glob from "glob";
 import temp from "temp";
 import rimraf from "rimraf";
 import coverage from "../../src/commands/coverage";
@@ -32,7 +30,11 @@ describe("cli: gluestick coverage", function () {
     fs.closeSync(fs.openSync(".gluestick", "w"));
     coverage(null, err => {
       expect(err).to.be.undefined;
-      expect(fs.statSync(path.join(process.cwd(), 'coverage')).isDirectory()).to.be.true;
+      const stat = () => {
+        const dir = fs.statSync(path.join(process.cwd(), 'coverage'));
+        expect(dir.isDirectory()).to.be.true;
+      };
+      expect(stat).to.not.throw(Error);
       done();
     });
   });
@@ -41,7 +43,11 @@ describe("cli: gluestick coverage", function () {
     fs.closeSync(fs.openSync(".gluestick", "w"));
     coverage({html: true}, err => {
       expect(err).to.be.undefined;
-      expect(fs.statSync(path.join(process.cwd(), 'coverage/html/index.html')).isFile()).to.be.true;
+      const stat = () => {
+        const file = fs.statSync(path.join(process.cwd(), 'coverage/html/index.html'));
+        expect(file.isFile()).to.be.true;
+      };
+      expect(stat).to.not.throw(Error);
       done();
     });
   });
